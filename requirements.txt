@@ -22,3 +22,5 @@ typing-inspection =0.4.2
 uvicorn           =0.38.0
 yarl              =1.22.0
 sentence_transformers
+requests
+tqdm

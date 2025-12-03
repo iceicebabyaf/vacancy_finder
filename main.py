@@ -2,6 +2,7 @@ import argparse
 
 from matcher.matcher import Matcher
 from gigachat_api.dependencies_prompt import _cached_prompt_manager
+from vk_parser.parser import analyze_vk_posts
 
 def main():
     parser = argparse.ArgumentParser()
@@ -11,7 +12,11 @@ def main():
     args = parser.parse_args()
 
     # parse vk
-    parsed_posts = None
+    parsed_posts = analyze_vk_posts(
+        profile_url="https://vk.com/vandarkh0lme",
+        depth=1,
+        period_days=30
+    )
     
     # call llm
     llm_results = []
