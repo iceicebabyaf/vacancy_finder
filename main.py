@@ -18,11 +18,62 @@ def main():
         depth=1,
         period_days=30
     )
-    # call llm
-    llm_results = []
-    for parsed_post in parsed_posts:
-        if _cached_prompt_manager.send_text(parsed_post["text"]):
-            llm_results.append(parsed_post)
+
+    # ==== gigachat API ====
+    import asyncio
+    import json
+
+    from gigachat_api.dependencies_prompt import get_giga_prompt_manager
+    from gigachat_api.managers.auth_manager import get_giga_token_manager
+
+    async def _call_llm_for_posts(posts):
+        token_manager = await get_giga_token_manager()
+        pm = await get_giga_prompt_manager(token_manager)
+
+        results = []
+
+        for post in posts:
+            text = post.get("text", "").strip()
+            if not text:
+                continue
+
+            try:
+                raw_response = await pm.send_text(text)
+                message = raw_response["choices"][0]["message"]
+
+                if message.get("function_call"):
+                    args = message["function_call"]["arguments"]
+
+                    if isinstance(args, str):
+                        try:
+                            verdict = json.loads(args).get("answer", -1)
+                        except Exception:
+                            verdict = -1
+                    else:
+                        verdict = args.get("answer", -1)
+
+                else:
+                    content = message.get("content", "").strip()
+                    verdict = 1 if "1" in content else 0
+
+                verdict = int(verdict)
+                if verdict not in (0, 1):
+                    verdict = 0
+
+                result_post = post.copy()
+                result_post["llm_verdict"] = verdict
+                result_post["llm_raw"] = raw_response
+
+                results.append(result_post)
+
+            except Exception as e:
+                print(f"Ошибка при запросе к GigaChat для поста {post.get('author_id')}: {e}")
+
+        return results
+    
+    llm_results = asyncio.run(_call_llm_for_posts(parsed_posts))
+    # =========
+
 
     # match texts
     matcher = Matcher(model_type=args.model_type,

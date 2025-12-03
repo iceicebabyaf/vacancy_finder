@@ -1,0 +1,187 @@
+ТЕСТ 1/5
+Тестируем текст:
+Ищем Senior Python разработчика в Москве, зарплата 400–600к, удалённо не рассматриваем, пишите в ЛС
+============================================================
+Полный ответ от GigaChat:
+{
+  "choices": [
+    {
+      "message": {
+        "content": "",
+        "role": "assistant",
+        "function_call": {
+          "name": "submit_vacancy_verdict",
+          "arguments": {
+            "answer": 1
+          }
+        },
+        "functions_state_id": "019ae56e-37b6-7ef8-9e84-533d512b62ef"
+      },
+      "index": 0,
+      "finish_reason": "function_call"
+    }
+  ],
+  "created": 1764785797,
+  "model": "GigaChat:2.0.28.2",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 182,
+    "completion_tokens": 11,
+    "total_tokens": 193,
+    "precached_prompt_tokens": 1
+  }
+}
+
+ВЕРДИКТ: 1 → Вакансия!!!
+
+————————————————————————————————————————————————————————————————————————————————
+
+ТЕСТ 2/5
+Тестируем текст:
+Продаю iPhone 15 Pro Max 256 гб, состояние новый, коробка, чек, 110к торг
+============================================================
+Полный ответ от GigaChat:
+{
+  "choices": [
+    {
+      "message": {
+        "content": "",
+        "role": "assistant",
+        "function_call": {
+          "name": "submit_vacancy_verdict",
+          "arguments": {
+            "answer": 0
+          }
+        },
+        "functions_state_id": "019ae56e-3ed6-7774-85e3-ec1f6eb28db2"
+      },
+      "index": 0,
+      "finish_reason": "function_call"
+    }
+  ],
+  "created": 1764785798,
+  "model": "GigaChat:2.0.28.2",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 61,
+    "completion_tokens": 11,
+    "total_tokens": 72,
+    "precached_prompt_tokens": 119
+  }
+}
+
+ВЕРДИКТ: 0 → Не вакансия
+
+————————————————————————————————————————————————————————————————————————————————
+
+ТЕСТ 3/5
+Тестируем текст:
+Требуется курьер в Яндекс.Еду, гибкий график, оплата каждый день
+============================================================
+Полный ответ от GigaChat:
+{
+  "choices": [
+    {
+      "message": {
+        "content": "",
+        "role": "assistant",
+        "function_call": {
+          "name": "submit_vacancy_verdict",
+          "arguments": {
+            "answer": 1
+          }
+        },
+        "functions_state_id": "019ae56e-45e9-7ec2-ac96-b3747934ed4c"
+      },
+      "index": 0,
+      "finish_reason": "function_call"
+    }
+  ],
+  "created": 1764785800,
+  "model": "GigaChat:2.0.28.2",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 165,
+    "completion_tokens": 11,
+    "total_tokens": 176,
+    "precached_prompt_tokens": 1
+  }
+}
+
+ВЕРДИКТ: 1 → Вакансия!!!
+
+————————————————————————————————————————————————————————————————————————————————
+
+ТЕСТ 4/5
+Тестируем текст:
+Всем привет, как дела? Давно не писал)
+============================================================
+Полный ответ от GigaChat:
+{
+  "choices": [
+    {
+      "message": {
+        "content": "",
+        "role": "assistant",
+        "function_call": {
+          "name": "submit_vacancy_verdict",
+          "arguments": {
+            "answer": 0
+          }
+        },
+        "functions_state_id": "019ae56e-4cfa-7a4f-8b62-070a2e016295"
+      },
+      "index": 0,
+      "finish_reason": "function_call"
+    }
+  ],
+  "created": 1764785802,
+  "model": "GigaChat:2.0.28.2",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 161,
+    "completion_tokens": 11,
+    "total_tokens": 172,
+    "precached_prompt_tokens": 1
+  }
+}
+
+ВЕРДИКТ: 0 → Не вакансия
+
+————————————————————————————————————————————————————————————————————————————————
+
+ТЕСТ 5/5
+Тестируем текст:
+Нужен Middle QA инженер, стек: Python + Selenium + Pytest, офис в Питере, зп до 300к на руки
+============================================================
+Полный ответ от GigaChat:
+{
+  "choices": [
+    {
+      "message": {
+        "content": "",
+        "role": "assistant",
+        "function_call": {
+          "name": "submit_vacancy_verdict",
+          "arguments": {
+            "answer": 1
+          }
+        },
+        "functions_state_id": "019ae56e-541a-7547-8220-1367c4ce0c69"
+      },
+      "index": 0,
+      "finish_reason": "function_call"
+    }
+  ],
+  "created": 1764785804,
+  "model": "GigaChat:2.0.28.2",
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 183,
+    "completion_tokens": 11,
+    "total_tokens": 194,
+    "precached_prompt_tokens": 1
+  }
+}
+
+ВЕРДИКТ: 1 → Вакансия!!!
