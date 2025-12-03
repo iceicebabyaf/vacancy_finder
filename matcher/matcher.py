@@ -1,5 +1,5 @@
-from base_predictor import BasePredictor
-from bert_predictor import BertPredictor
+from matcher.base_predictor import BasePredictor
+from matcher.bert_predictor import BertPredictor
 
 class Matcher:
     def __init__(self, model_type: str, profile: str, threshold=0.5):
