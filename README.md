@@ -8,5 +8,12 @@
 1. Клонируйте репозиторий `git clone https://github.com/iceicebabyaf/vacancy_finder.git`
 2. Создайте виртуальную среду Python `python -m venv venv` и активируйте её: для Windows `venv/scripts/activate`, для Linux/MacOS `source venv/bin/activate`
 3. Установите зависимости `pip installl -r requirements.txt`
-4. Запустите приложение python main.py --profile <profile> --url <url>, указав аргументы `--profile` -- описание вашего профиля пользователя, `--url` -- адрес вашей страницы ВК
-5. Доступны аргументы `--model_type` и `model_threshold` для выбора модели, производящий анализ вашего профиля и вакансий и ее порога.
+4. Создайте .env файл в корне проект вида:
+   ```bash
+    CLIENT_ID_GIGACHAT=
+    AUTH_KEY_GIGACHAT=
+    SCOPE_GIGACHAT="GIGACHAT_API_PERS"
+    VK_TOKEN=
+   ```
+5. Запустите приложение python main.py --profile <profile> --url <url>, указав аргументы `--profile` -- описание вашего профиля пользователя, `--url` -- адрес вашей страницы ВК
+7. Доступны аргументы `--model_type` и `model_threshold` для выбора модели, производящий анализ вашего профиля и вакансий и ее порога.
