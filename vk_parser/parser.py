@@ -20,6 +20,20 @@ if not VK_TOKEN:
 
 
 def vk_api(method, params):
+    """
+    Выполняет запрос к API ВКонтакте.
+
+    Параметры:
+        method (str): имя метода API (например, "users.get").
+        params (dict): параметры запроса для метода.
+
+    Возвращает:
+        dict: поле "response" из ответа API.
+
+    Исключения:
+        Exception: если API вернул ошибку.
+    """
+
     params["access_token"] = VK_TOKEN
     params["v"] = VK_API_VERSION
     r = requests.get(f"https://api.vk.com/method/{method}", params=params).json()
@@ -29,20 +43,55 @@ def vk_api(method, params):
 
 
 def extract_id_from_url(url):
+    """
+    Извлекает числовой ID пользователя по ссылке на профиль.
+
+    Параметры:
+        url (str): ссылка вида https://vk.com/username или https://vk.com/id123.
+
+    Возвращает:
+        int: числовой ID пользователя.
+    """
+
     screen_name = urlparse(url).path.strip("/")
     data = vk_api("users.get", {"user_ids": screen_name})
     return data[0]["id"]
 
 
 def get_friends(user_id):
+    """
+    Получает список ID друзей пользователя.
+
+    Параметры:
+        user_id (int): ID пользователя ВК.
+
+    Возвращает:
+        list[int]: список ID друзей.
+        Если доступ ограничен или произошла ошибка — пустой список.
+    """
+
     try:
         data = vk_api("friends.get", {"user_id": user_id})
         return data["items"]
-    except:
+    except Exception as e:
+        print(f"[WARN] Не удалось получить друзей {user_id}: {e}")
         return []
 
 
+
 def simplify_post(item, owner_id, path):
+    """
+    Преобразует объект поста в упрощённый формат.
+
+    Параметры:
+        item (dict): объект поста из VK API.
+        owner_id (int): автор поста.
+        path (list[str]): путь пользователей, по которому был найден пост.
+
+    Возвращает:
+        dict: словарь с полями author_id, author_url, date, text и path.
+    """
+
     return {
         "author_id": owner_id,
         "author_url": f"https://vk.com/id{owner_id}",
@@ -53,6 +102,22 @@ def simplify_post(item, owner_id, path):
 
 
 def get_posts(user_id, min_timestamp, path):
+    """
+    Получает посты пользователя за определённый период.
+
+    Параметры:
+        user_id (int): ID пользователя.
+        min_timestamp (int): минимальная дата (UNIX), ниже которой посты игнорируются.
+        path (list[str]): путь посещённых профилей.
+
+    Возвращает:
+        list[dict]: список упрощённых постов.
+
+    Особенности:
+        — Обрабатывает закрытые профили, скрытые стены и удалённых пользователей.
+        — В случае ошибки выводит предупреждение и возвращает пустой список.
+    """
+
     try:
         data = vk_api("wall.get", {"owner_id": user_id, "count": 100, "offset": 0})
     except Exception as e:
@@ -79,6 +144,22 @@ def get_posts(user_id, min_timestamp, path):
 
 
 def crawl(user_id, depth, min_timestamp, visited=None, seen_posts=None, progress=None, path=None):
+    """
+    Рекурсивно обходит друзей пользователя и собирает посты.
+
+    Параметры:
+        user_id (int): ID стартового пользователя.
+        depth (int): глубина обхода (0 — только текущий пользователь).
+        min_timestamp (int): минимальная дата постов.
+        visited (set[int], optional): уже посещённые ID, чтобы избежать циклов.
+        seen_posts (set[str], optional): уникальные ключи постов, чтобы избежать дублей.
+        progress (tqdm, optional): индикатор прогресса.
+        path (list[str], optional): путь обхода от корневого пользователя.
+
+    Возвращает:
+        list[dict]: собранные посты.
+    """
+
     if visited is None:
         visited = set()
     if seen_posts is None:
@@ -114,8 +195,22 @@ def crawl(user_id, depth, min_timestamp, visited=None, seen_posts=None, progress
 
 def analyze_vk_posts(profile_url, depth, period_days, json_file=None):
     """
-    Возвращает список постов и опционально сохраняет в JSON.
+    Запускает анализ профиля: извлекает посты пользователя и его друзей.
+
+    Параметры:
+        profile_url (str): ссылка на профиль ВК.
+        depth (int): глубина обхода друзей.
+        period_days (int): период анализа (в днях).
+        json_file (str | None): путь к JSON-файлу для сохранения результата.
+
+    Возвращает:
+        list[dict]: найденные посты.
+
+    Особенности:
+        — Показывает прогресс обхода.
+        — Может сохранять результат в JSON.
     """
+
     user_id = extract_id_from_url(profile_url)
     min_timestamp = int((datetime.now() - timedelta(days=period_days)).timestamp())
 
